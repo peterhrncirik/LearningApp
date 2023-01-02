@@ -1,5 +1,10 @@
 from pathlib import Path
 import socket
+from environs import Env
+
+# Set Up ENV
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -8,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-0peo@#x9jur3!h$ryje!$879xww8y1y66jx!%*#ymhg&jkozs2"
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
+DEBUG = env.bool("DEBUG")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
@@ -28,11 +33,14 @@ INSTALLED_APPS = [
     "allauth.account",
     "crispy_forms",
     "crispy_bootstrap5",
+    "django_htmx",
     "debug_toolbar",
     # Local
     "accounts",
     "pages",
+    "learning",
 ]
+
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
@@ -45,6 +53,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_htmx.middleware.HtmxMiddleware",
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
@@ -161,10 +170,10 @@ AUTH_USER_MODEL = "accounts.CustomUser"
 SITE_ID = 1
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "home"
+LOGIN_REDIRECT_URL = "pages:home"
 
 # https://django-allauth.readthedocs.io/en/latest/views.html#logout-account-logout
-ACCOUNT_LOGOUT_REDIRECT_URL = "home"
+ACCOUNT_LOGOUT_REDIRECT_URL = "pages:home"
 
 # https://django-allauth.readthedocs.io/en/latest/installation.html?highlight=backends
 AUTHENTICATION_BACKENDS = (
@@ -178,3 +187,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+
+# Forms CSS
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

@@ -1,0 +1,26 @@
+<form action="{% url 'learning:learn' %}" method="POST">
+
+  {% csrf_token %}
+  {{ formset.management_form }}
+
+
+  <div id="timestamps-form-list">
+
+    {% for form in formset %}
+      <div class="timestamp-form">
+
+        {{ form }}
+        
+      </div>
+    {% endfor %}
+
+  </div>
+
+  <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
+
+  <div class="form-actions">
+      <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
+      <button  name="append"  class="btn btn-danger" id="append">Add new</button>
+  </div>
+
+</form>

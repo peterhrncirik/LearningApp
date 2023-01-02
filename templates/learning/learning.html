@@ -1,0 +1,85 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Learning Page{% endblock title %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <p class="lead">Let's Learn something new!</p>
+</div>
+{% comment %} <input class="form-control form-control-lg" type="text" placeholder="Link to video" aria-label=".form-control-lg example" hx-indicator="#indicator" name="link" id="link" hx-get="{% url 'learning:load_video' %}" hx-target="#main" hx-trigger="keyup"> {% endcomment %}
+{% crispy url_form %}
+<div id="main">
+  <p id="indicator" class="htmx-indicator">Loading video...</p>
+</div>
+
+
+<div class='row text-center'>
+  <form action="{% url 'learning:learn' %}" method="POST">
+
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+
+    <div id="timestamps-form-list">
+
+      {% for form in formset %}
+        <div class="timestamp-form">
+
+          {{ form }}
+          
+        </div>
+      {% endfor %}
+
+    </div>
+
+    <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
+
+    <div class="form-actions">
+        <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
+        <button  name="append"  class="btn btn-danger" id="append">Add new</button>
+    </div>
+
+  </form> 
+</div>
+
+
+<script>
+
+  const btn = document.getElementById('append')
+  const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+
+  btn.addEventListener('click', event => {
+    
+    if (event) {
+      event.preventDefault()
+    }
+
+
+
+    const currentTimestampForms = document.getElementsByClassName('timestamps-form')
+    const currentFormCount = currentTimestampForms.length // + 1
+
+
+
+    // Append new form
+    const formDiv = document.getElementById('timestamps-form-list')
+    const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
+    copyEmptyFormEl.setAttribute('class', 'timestamps-form my-1 form-control')
+    copyEmptyFormEl.setAttribute('id', `form-${currentFormCount}`)
+    const regex = new RegExp('__prefix__', 'g')
+    copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
+    totalNewForms .setAttribute('value', currentFormCount + 1)
+    formDiv.append(copyEmptyFormEl)
+
+
+
+
+  })
+
+
+</script> 
+
+
+{% endblock content %}
