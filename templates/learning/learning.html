@@ -5,18 +5,20 @@
 {% block title %}Learning Page{% endblock title %}
 
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-  <p class="lead">Let's Learn something new!</p>
+
+<div class="row my-4">
+  <iframe width="420" height="315"
+  src="https://www.youtube.com/embed/{{ video_id }}">
+  </iframe> 
 </div>
-{% comment %} <input class="form-control form-control-lg" type="text" placeholder="Link to video" aria-label=".form-control-lg example" hx-indicator="#indicator" name="link" id="link" hx-get="{% url 'learning:load_video' %}" hx-target="#main" hx-trigger="keyup"> {% endcomment %}
-{% crispy url_form %}
-<div id="main">
-  <p id="indicator" class="htmx-indicator">Loading video...</p>
+<div class="row text-center">
+
 </div>
 
+{% include 'learning/partials/form.html' %} 
 
-<div class='row text-center'>
-  <form action="{% url 'learning:learn' %}" method="POST">
+{% comment %} <div class='row text-center'>
+  <form hx-post="{% url 'learning:process' user.id video_id %}">
 
     {% csrf_token %}
     {{ formset.management_form }}
@@ -37,12 +39,13 @@
     <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
 
     <div class="form-actions">
+      <input type="hidden" name="link" id="link" value="{{ link }}">
         <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
         <button  name="append"  class="btn btn-danger" id="append">Add new</button>
     </div>
 
   </form> 
-</div>
+</div>   {% endcomment %}
 
 
 <script>

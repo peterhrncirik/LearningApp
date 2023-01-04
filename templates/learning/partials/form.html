@@ -1,26 +1,29 @@
-<form action="{% url 'learning:learn' %}" method="POST">
+<div class='row text-center'>
+  <form hx-post="{% url 'learning:process' user.id video_id %}">
 
-  {% csrf_token %}
-  {{ formset.management_form }}
+    {% csrf_token %}
+    {{ formset.management_form }}
 
 
-  <div id="timestamps-form-list">
+    <div id="timestamps-form-list">
 
-    {% for form in formset %}
-      <div class="timestamp-form">
+      {% for form in formset %}
+        <div class="timestamp-form">
 
-        {{ form }}
-        
-      </div>
-    {% endfor %}
+          {{ form }}
+          
+        </div>
+      {% endfor %}
 
-  </div>
+    </div>
 
-  <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
+    <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
 
-  <div class="form-actions">
-      <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
-      <button  name="append"  class="btn btn-danger" id="append">Add new</button>
-  </div>
+    <div class="form-actions">
+      <input type="hidden" name="link" id="link" value="{{ link }}">
+        <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
+        <button  name="append"  class="btn btn-danger" id="append">Add new</button>
+    </div>
 
-</form>
+  </form> 
+</div>

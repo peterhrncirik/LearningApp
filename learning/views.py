@@ -1,62 +1,68 @@
-from django.shortcuts import render, redirect, HttpResponse
+from django.shortcuts import render, redirect, HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
-from .forms import TimestampsForm, VideoLinkForm, TimestampsFormSetHelper
-from django.core.validators import URLValidator
-from django.core.exceptions import ValidationError
+from .models import Video, Learning
+from accounts.models import CustomUser
+from .forms import TimestampsForm, VideoLinkForm
+
 import re
+import time
+
+# VIDEO
+from pytube import YouTube
+from .youtube import main
+
+# DEBUG
+from pprint import pprint
+# assert something
+# assert False, 'This is forbidden'
 
 
-def learning(request):
+@login_required
+def learning(request, id):
     
     TimestampsFormSet = formset_factory(TimestampsForm, extra=0)
     formset = TimestampsFormSet()
+ 
+    if request.method == 'POST':
+        
+        User = CustomUser.objects.get(id=id)
+        video_id = request.POST.get('video_id')
 
+        return render(request, "learning/learning.html", {'video_id': video_id, 'formset': formset})
     
-    # form-n-start
-    # form-n-end
+        
+    
+@login_required
+def process_timestamps(request, id, video_id):
+    
+    TimestampsFormSet = formset_factory(TimestampsForm)
+    marked_timestamps = []
     
     if request.method == 'POST':
-        marked = []
-        print('-----------------------------------------------------')
-        print(request.POST)
-        print('-----------------------------------------------------')
         
         form = TimestampsFormSet(request.POST)
-        if form.is_valid():
-            print('VALID')
-        else:
-            print('INVALID')
-        
-        
-        form = TimestampsFormSet(request.POST)
+
         if form.has_changed() and form.is_valid():
+            
+            #TODO: Insert new Learning session into DB
+            
+            # Start processing video
             timestamps = form.cleaned_data
-            print(timestamps)
-            for _ in timestamps:
-                marked.append([_['start'], _['end']])
-                
+            
+            # Maybe I can directly here produce output for each input
+            for row in timestamps:
+                marked_timestamps.append([row['start'], row['end']])
+
+            print('MARKED: ', marked_timestamps)
+            
+            # Start processing video > download > timestamps > cut captions / cut audio
+            # video = YouTube(f'https://www.youtube.com/{video_id}')
+            print('STARTING PROCESSING VIDEO.................')
+            main.process_video(link=f'https://www.youtube.com/{video_id}', id=video_id, timestamps=marked_timestamps)
+
+            return HttpResponse('CORRECT FORM!')
         else:
-            print('-------------------') 
-            print('Fill the form first')
-    
-    url_form = VideoLinkForm()
-
-    
-    return render(request, "learning/learning.html", {'url_form': url_form, 'formset': formset})
-        
-
-def get_video(request):
-    
-    validator = URLValidator()
-    link = request.GET.get('link')
-
-    try:
-        validator(link)
-        match = re.search(r"/watch\?v=([^&]*)", link)
-        id = match.group(1)
-        return render(request, 'learning/partials/video.html', {'link': id})
-    except ValidationError:
-        return HttpResponse('Please insert a youtube video :)')
-    
+            return render(request, "learning/partials/form.html", {'video_id': video_id, 'formset': form})
         
 

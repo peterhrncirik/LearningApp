@@ -5,6 +5,11 @@ from . import views
 app_name = 'learning'
 
 urlpatterns = [
-    path("", views.learning, name="learn"),
-    path("load/", views.get_video, name="load_video"),
+    path("session/<int:id>/", views.learning, name="learn"),
 ]
+
+htmx_urlpatterns = [
+    path('process-video/<int:id>/<str:video_id>/', views.process_timestamps, name='process'),
+]
+
+urlpatterns += htmx_urlpatterns

@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Start here{% endblock title %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+  <p class="lead">Let's Learn something new!</p>
+</div>
+{% crispy form %}
+<div id="main">
+  <span>
+    <img  id="spinner" class="htmx-indicator" src="../static/images/bars.svg"/>
+    <span id="spinner" class="htmx-indicator"> Preparing your video...</span>
+  </span>
+</div>
+{% endblock content %}

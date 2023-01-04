@@ -15,7 +15,10 @@ COPY requirements.txt /tmp/requirements.txt
 RUN set -ex && \
     pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
-    rm -rf /root/.cache/
+    apt-get -y update && \
+    apt-get -y upgrade && \
+    apt-get install -y ffmpeg && \
+    rm -rf /root/.cache/ 
 
 # Copy local project
 COPY . /app/
