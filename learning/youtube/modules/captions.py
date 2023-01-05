@@ -16,9 +16,7 @@ def extract_captions(start_time, end_time, id):
             
             for match in re.finditer(pattern, row):
                 
-                # to_extract_start = convert_time('00:00:28,000')
-                to_extract_start = convert_time(start_time)
-                # to_extract_end = convert_time('00:00:59,000')
+                to_extract_start = convert_time(start_time, subs_start=True)
                 to_extract_end = convert_time(end_time)
                 sentence = match.group(3)
                 

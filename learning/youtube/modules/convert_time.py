@@ -1,11 +1,18 @@
-def convert_time(timestamp):
+def convert_time(timestamp, subs_start=False):
     
+    # Convert to ints
     hours = timestamp.hour
     minutes = timestamp.minute
-    seconds = timestamp.second
-    total = (hours * 3600 + minutes * 60 + seconds) * 1000
     
-    return(total)
+    if subs_start:
+        seconds = timestamp.second - 1
+        
+    seconds = timestamp.second 
+    
+    # Convert time to milliseconds
+    total_ms = (hours * 3600 + minutes * 60 + seconds) * 1000
+    
+    return total_ms
 
 def convert_time_from_srt(timestamp):
     
@@ -16,13 +23,11 @@ def convert_time_from_srt(timestamp):
     hours = int(parts[0])
     minutes = int(parts[1])
     seconds_milliseconds = parts[2].split(",")
-    seconds = int(seconds_milliseconds[0]) - 1
-    print('REQUESTED SECONDS: ', int(seconds_milliseconds[0]))
-    print('REAL SECONDS: ', seconds)
+    seconds = int(seconds_milliseconds[0])
     milliseconds = int(seconds_milliseconds[1])
     
     # Convert time to milliseconds
     # total_ms = (hours * 3600 + minutes * 60 + seconds) * 1000 + milliseconds
     total_ms = (hours * 3600 + minutes * 60 + seconds) * 1000 
-      
+    
     return total_ms

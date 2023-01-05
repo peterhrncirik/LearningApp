@@ -3,22 +3,6 @@ from .modules.audio import extract_audio
 from .modules.captions import extract_captions
 import time
 
-START_TIME = '00:08:18,000'
-END_TIME = '00:13:39,000' # add a minute to finish sentence
-
-# Get the audio and download it
-# stream = yt.streams.get_audio_only('mp4')
-# stream.download()
-
-# Captions
-# captions = yt.captions['a.de']
-# print(captions)
-# captions.download('subs')
-
-
-# print(extract_captions(START_TIME, END_TIME))
-# extract_audio(START_TIME, END_TIME)
-
 def process_video(link, id, timestamps):
     
     # Load video
