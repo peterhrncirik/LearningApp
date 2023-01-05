@@ -21,6 +21,6 @@ class VideoLinkForm(forms.Form):
                         'hx-post': reverse_lazy('pages:start'),
                         'hx-target': '#main',
                         'hx-trigger': 'keyup changed delay:500ms',
-                        # 'hx-swap': 'outerhtml',
+                        'hx-swap': 'outerhtml',
                     }),
                     required=False)

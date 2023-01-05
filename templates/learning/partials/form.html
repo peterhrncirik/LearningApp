@@ -1,5 +1,5 @@
 <div class='row text-center'>
-  <form hx-post="{% url 'learning:process' user.id video_id %}">
+  <form action="{% url 'learning:process' user.id video_id %}" method="POST">
 
     {% csrf_token %}
     {{ formset.management_form }}
@@ -22,8 +22,11 @@
     <div class="form-actions">
       <input type="hidden" name="link" id="link" value="{{ link }}">
         <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
-        <button  name="append"  class="btn btn-danger" id="append">Add new</button>
+        <button  name="append"  class="btn btn-danger" id="append" onclick="manageForm()">Mark new timestamp</button>
     </div>
 
   </form> 
 </div>
+
+
+

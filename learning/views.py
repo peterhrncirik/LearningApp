@@ -4,6 +4,7 @@ from django.forms import formset_factory
 from .models import Video, Learning
 from accounts.models import CustomUser
 from .forms import TimestampsForm, VideoLinkForm
+from django.core.exceptions import ValidationError
 
 import re
 import time
@@ -22,14 +23,14 @@ from pprint import pprint
 def learning(request, id):
     
     TimestampsFormSet = formset_factory(TimestampsForm, extra=0)
-    formset = TimestampsFormSet()
+    form = TimestampsFormSet()
  
     if request.method == 'POST':
         
         User = CustomUser.objects.get(id=id)
         video_id = request.POST.get('video_id')
 
-        return render(request, "learning/learning.html", {'video_id': video_id, 'formset': formset})
+        return render(request, "learning/learning.html", {'video_id': video_id, 'formset': form})
     
         
     
@@ -42,9 +43,10 @@ def process_timestamps(request, id, video_id):
     if request.method == 'POST':
         
         form = TimestampsFormSet(request.POST)
-
+        current_user = request.user
         if form.has_changed() and form.is_valid():
             
+            #TODO: Daj do template JS na disable enter event
             #TODO: Insert new Learning session into DB
             
             # Start processing video
@@ -52,17 +54,17 @@ def process_timestamps(request, id, video_id):
             
             # Maybe I can directly here produce output for each input
             for row in timestamps:
+                
                 marked_timestamps.append([row['start'], row['end']])
 
             print('MARKED: ', marked_timestamps)
             
-            # Start processing video > download > timestamps > cut captions / cut audio
-            # video = YouTube(f'https://www.youtube.com/{video_id}')
+            # Start processing video 
             print('STARTING PROCESSING VIDEO.................')
-            main.process_video(link=f'https://www.youtube.com/{video_id}', id=video_id, timestamps=marked_timestamps)
+            main.process_video(link=f'https://www.youtube.com/{video_id}', video_id=video_id, user_id=current_user.id, timestamps=marked_timestamps)
 
             return HttpResponse('CORRECT FORM!')
         else:
-            return render(request, "learning/partials/form.html", {'video_id': video_id, 'formset': form})
+            return render(request, "learning/learning.html", {'video_id': video_id, 'formset': form})
         
 

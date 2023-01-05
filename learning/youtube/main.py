@@ -3,7 +3,7 @@ from .modules.audio import extract_audio
 from .modules.captions import extract_captions
 import time
 
-def process_video(link, id, timestamps):
+def process_video(link, video_id, user_id, timestamps):
     
     # Load video
     video = YouTube(link)
@@ -12,7 +12,7 @@ def process_video(link, id, timestamps):
     try:
         audio = video.streams.get_audio_only('mp4')
         print('Downloading AUDIO....')
-        audio.download(output_path=f'media/video/{id}/', filename=f'{id}.mp4')
+        audio.download(output_path=f'media/video/{video_id}_{user_id}/', filename=f'{video_id}.mp4')
         print('AUDIO Downloaded.')
     except:
         print('AUDIO NOT FOUND.')
@@ -21,7 +21,7 @@ def process_video(link, id, timestamps):
     for i, timestamp in enumerate(timestamps):
         start, end = timestamp
         print(f'Extracting Audio part {i}')
-        extract_audio(start, end, id)
+        extract_audio(start, end, video_id, user_id, current_iteration=i)
         print('Done.')
     
     
@@ -35,7 +35,7 @@ def process_video(link, id, timestamps):
             captions = video.captions['a.de']
             
         print('Downloading SUBTITLES....')
-        captions.download(f'{id}', output_path=f'media/video/{id}/')
+        captions.download(f'{video_id}', output_path=f'media/video/{video_id}_{user_id}/')
         print('SUBTITLES Downloaded.')
     except Exception as e:
         print('SUBTITLES Not Found.')
@@ -46,13 +46,17 @@ def process_video(link, id, timestamps):
     # Handle Captions
     for i, timestamp in enumerate(timestamps):
         
+        
+        #TODO: Hod sem aj audio a rob to pod jednym Loopom
+        #TODO: Ukladanie zmen na videoid_userid/
+        
         start, end = timestamp
         print(f'Extracting Subtitles part {i}')
-        sentences = extract_captions(start, end, id)
+        sentences = extract_captions(start, end, video_id, user_id)
         
         print('Writing captions to a File.')
         
-        with open(f'media/video/{id}/{i}.srt', 'w') as file:
+        with open(f'media/video/{video_id}_{user_id}/{i}/{i}.srt', 'w') as file:
             
             for sentence in sentences:
                 

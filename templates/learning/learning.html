@@ -7,18 +7,12 @@
 {% block content %}
 
 <div class="row my-4">
-  <iframe width="420" height="315"
-  src="https://www.youtube.com/embed/{{ video_id }}">
-  </iframe> 
-</div>
-<div class="row text-center">
-
+  {% include 'learning/partials/video.html' with video_id=video_id %} 
 </div>
 
-{% include 'learning/partials/form.html' %} 
 
-{% comment %} <div class='row text-center'>
-  <form hx-post="{% url 'learning:process' user.id video_id %}">
+<div class='row text-center'>
+  <form action="{% url 'learning:process' user.id video_id %}" method="POST">
 
     {% csrf_token %}
     {{ formset.management_form }}
@@ -41,18 +35,24 @@
     <div class="form-actions">
       <input type="hidden" name="link" id="link" value="{{ link }}">
         <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
-        <button  name="append"  class="btn btn-danger" id="append">Add new</button>
+        <button  name="append"  class="btn btn-danger" id="append" onclick="manageForm()">Mark new timestamp</button>
     </div>
 
   </form> 
-</div>   {% endcomment %}
+</div>
+
+
+
+
 
 
 <script>
 
   const btn = document.getElementById('append')
   const totalNewForms = document.getElementById('id_form-TOTAL_FORMS')
+  const btnSave = document.getElementById('submit-id-submit')
 
+  
   btn.addEventListener('click', event => {
     
     if (event) {
@@ -62,19 +62,24 @@
 
 
     const currentTimestampForms = document.getElementsByClassName('timestamps-form')
-    const currentFormCount = currentTimestampForms.length // + 1
-
+    const currentNum = totalNewForms.getAttribute('value')
+    // const currentFormCount = currentTimestampForms.length // + 1
 
 
     // Append new form
     const formDiv = document.getElementById('timestamps-form-list')
     const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
     copyEmptyFormEl.setAttribute('class', 'timestamps-form my-1 form-control')
-    copyEmptyFormEl.setAttribute('id', `form-${currentFormCount}`)
+    copyEmptyFormEl.setAttribute('id', `form-${parseInt(currentNum)}`)
     const regex = new RegExp('__prefix__', 'g')
-    copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, currentFormCount)
-    totalNewForms .setAttribute('value', currentFormCount + 1)
+    copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, parseInt(currentNum))
+    totalNewForms.setAttribute('value', parseInt(currentNum) + 1)
     formDiv.append(copyEmptyFormEl)
+
+    // if (totalNewForms.getAttribute('value') >= 1) {
+    //   btnSave.classList.remove('d-none')
+    //   btnSave.removeAttribute('disabled')
+    // }
 
 
 

@@ -1,5 +1,7 @@
 def convert_time(timestamp, subs_start=False):
     
+    #TODO: Zatial to vyzera ze audio treba trochu predlzit, ale treba este otestovat
+    
     # Convert to ints
     hours = timestamp.hour
     minutes = timestamp.minute

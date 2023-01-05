@@ -1,12 +1,13 @@
+import os
 from pydub import AudioSegment
 from .convert_time import convert_time
 
 
-def extract_audio(start_time, end_time, id):
+def extract_audio(start_time, end_time, video_id, user_id, current_iteration):
     
     # Load Audio File
     print('Looking for file')
-    audio = AudioSegment.from_file(f"media/video/{id}/{id}.mp4", "mp4")
+    audio = AudioSegment.from_file(f"media/video/{video_id}_{user_id}/{video_id}.mp4", "mp4")
     print('File found')
     # audio = AudioSegment.from_file("audio.mp4", "mp4")
 
@@ -17,5 +18,6 @@ def extract_audio(start_time, end_time, id):
     extracted_audio = audio[start:end]
 
     # Save to New File
-    extracted_audio.export('media/video/new.mp3', format='mp3')
+    os.makedirs(f'media/video/{video_id}_{user_id}/{current_iteration}/')
+    extracted_audio.export(f'media/video/{video_id}_{user_id}/{current_iteration}/{current_iteration}.mp3', format='mp3')
 

@@ -1,9 +1,9 @@
 import re
 from .convert_time import convert_time, convert_time_from_srt
 
-def extract_captions(start_time, end_time, id):
+def extract_captions(start_time, end_time, video_id, user_id):
     
-    with open(f'media/video/{id}/{id}.srt', encoding="utf-8") as file:
+    with open(f'media/video/{video_id}_{user_id}/{video_id}.srt', encoding="utf-8") as file:
         
         pattern = r"(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3}) --> \|(.*?)\|"
 
