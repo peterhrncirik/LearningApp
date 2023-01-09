@@ -13,6 +13,8 @@ import time
 from pytube import YouTube
 from .youtube import main
 
+from .tasks import process_video_async
+
 # DEBUG
 from pprint import pprint
 # assert something
@@ -61,9 +63,11 @@ def process_timestamps(request, id, video_id):
             
             # Start processing video 
             print('STARTING PROCESSING VIDEO.................')
-            main.process_video(link=f'https://www.youtube.com/{video_id}', video_id=video_id, user_id=current_user.id, timestamps=marked_timestamps)
-
-            return HttpResponse('CORRECT FORM!')
+            # main.process_video(link=f'https://www.youtube.com/{video_id}', video_id=video_id, user_id=current_user.id, timestamps=marked_timestamps)
+            result = process_video_async.delay(link=f'https://www.youtube.com/{video_id}', video_id=video_id, user_id=current_user.id, timestamps=marked_timestamps)
+            
+            # return HttpResponse('Data downloaded.')
+            return render(request, 'learning/progress.html', context={'task_id': result.task_id})
         else:
             return render(request, "learning/learning.html", {'video_id': video_id, 'formset': form})
         

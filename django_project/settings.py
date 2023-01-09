@@ -1,10 +1,12 @@
+import os
 from pathlib import Path
-import socket
 from environs import Env
+import socket
 
 # Set Up ENV
 env = Env()
 env.read_env()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,6 +38,8 @@ INSTALLED_APPS = [
     "django_htmx",
     "debug_toolbar",
     "django_extensions",
+    "django_celery_results",
+    "celery_progress",
     # Local
     "accounts",
     "pages",
@@ -192,3 +196,7 @@ ACCOUNT_UNIQUE_EMAIL = True
 # Forms CSS
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/'
+CELERY_RESULT_BACKEND = 'django-db'
+

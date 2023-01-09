@@ -7,6 +7,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("", include("pages.urls")),
     path("learning/", include("learning.urls")),
+    path('celery-progress/', include('celery_progress.urls')),
 ]
 
 if settings.DEBUG:

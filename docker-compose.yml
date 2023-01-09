@@ -16,6 +16,24 @@ services:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A django_project worker -l info
+    volumes:
+      - .:/app
+    # env_file:
+    #   - ./.venv
+    depends_on:
+      - web
+      - rabbitmq3
+  rabbitmq3:
+    container_name: "rabbitmq"
+    image: rabbitmq:3-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
 
 volumes:
   postgres_data:

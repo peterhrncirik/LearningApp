@@ -8,7 +8,6 @@ from pprint import pprint
 from pytube import YouTube
 
 
-    
 def home(request):
     
     return render(request, 'pages/home.html')
