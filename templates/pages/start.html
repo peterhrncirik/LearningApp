@@ -5,19 +5,27 @@
 {% block title %}Start here{% endblock title %}
 
 {% block content %}
-<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-  <p class="lead">Let's Learn something new!</p>
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center text-white">
+  <h2 class="fw-semibold">Let's start learning!</h2>
+  <p> https://www.youtube.com/watch?v=Z5lbuzMw330 </p>
+  <hr class="text-warning">
 </div>
 {% crispy form %}
 
-<div class="my-3">
-  <span>
-    <img  id="spinner" class="htmx-indicator" src="../static/images/bars.svg"/>
-    <span id="spinner" class="htmx-indicator"> Preparing your video...</span>
-  </span>
-</div>
-
-<div id="main">
+<span class="d-flex align-items-center justify-content-start">
+  <img  id="spinner" class="htmx-indicator my-indicator" src="../static/images/pulse.svg"/>
+  <span id="spinner" class="htmx-indicator my-indicator text-white fs-4"> Preparing your video...</span>
+</span>
+<div id="main" class="text-white">
 
 </div>
+
+<script>
+  document.getElementById('link').addEventListener('keydown', function(event) {
+      if (event.keyCode == 13) {
+          event.preventDefault();
+      }
+      return false;
+  });
+</script>
 {% endblock content %}

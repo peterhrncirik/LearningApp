@@ -24,8 +24,8 @@ class VideoLinkForm(forms.Form):
                         'id': 'link',
                         'hx-post': reverse_lazy('learning:load_video'),
                         'hx-target': '#main',
-                        'hx-trigger': 'keyup changed delay:500ms',
-                        # 'hx-swap': 'outerhtml',
+                        'hx-trigger': 'changed delay:500ms',
+                        'hx-swap': 'outerhtml',
                     }),
                     required=False)
     
@@ -40,9 +40,9 @@ class TimestampsForm(forms.Form):
         self.fields['end'].label = "To"
 
     
-    start =  forms.TimeField(widget=forms.TimeInput(format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
+    start =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'x'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
 
-    end =  forms.TimeField(widget=forms.TimeInput(format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
+    end =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'x'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
     
 
     def clean(self):

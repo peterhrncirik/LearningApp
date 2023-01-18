@@ -6,6 +6,7 @@ app_name = 'learning'
 
 urlpatterns = [
     path("session/<int:id>/", views.learning, name="learn"),
+    path('download/<str:video_id>/', views.download, name='download'),
 ]
 
 htmx_urlpatterns = [

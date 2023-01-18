@@ -11,7 +11,7 @@
 </div>
 
 
-<div class='row text-center'>
+<div class='row text-center text-white'>
   <form action="{% url 'learning:process' user.id video_id %}" method="POST">
 
     {% csrf_token %}
@@ -27,15 +27,23 @@
           
         </div>
       {% endfor %}
+      
 
     </div>
+    <div class="row my-4 text-danger">
+      {{ formset.non_form_errors }}
+    </div>
+  
 
-    <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
 
-    <div class="form-actions">
+
+      <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
+
+
+    <div class="form-actions my-2">
       <input type="hidden" name="link" id="link" value="{{ link }}">
-        <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
-        <button  name="append"  class="btn btn-danger" id="append" onclick="manageForm()">Mark new timestamp</button>
+        <input type="submit" name="submit" value="Save" class="btn btn-success" id="submit-id-submit">
+        <button  name="append"  class="btn btn-danger" id="append" onclick="manageForm()">Add new timestamp</button>
     </div>
 
   </form> 
@@ -69,7 +77,7 @@
     // Append new form
     const formDiv = document.getElementById('timestamps-form-list')
     const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
-    copyEmptyFormEl.setAttribute('class', 'timestamps-form my-1 form-control')
+    copyEmptyFormEl.setAttribute('class', 'timestamps-form my-1 form-control bg-dark text-white border border-0')
     copyEmptyFormEl.setAttribute('id', `form-${parseInt(currentNum)}`)
     const regex = new RegExp('__prefix__', 'g')
     copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, parseInt(currentNum))

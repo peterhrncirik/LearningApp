@@ -1,10 +1,13 @@
 /* Sticky footer styles
 -------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;1,300&display=swap');
+
 html {
   position: relative;
   min-height: 100%;
   font-size: 14px;
 }
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -13,6 +16,7 @@ html {
 
 body {
   margin-bottom: 60px; /* Margin bottom by footer height */
+  font-family: 'Roboto', sans-serif;
 }
 
 .container {
@@ -30,4 +34,31 @@ body {
   height: 60px; /* Set the fixed height of the footer here */
   line-height: 60px; /* Vertically center the text there */
   background-color: #f5f5f5;
+}
+
+/* Video Loading AJAX Bars */
+
+.htmx-indicator{
+  display:none;
+}
+.htmx-request .my-indicator{
+  display:inline;
+}
+.htmx-request.my-indicator{
+  display:inline;
+}
+
+/* Learning Formset */
+.x {
+  background: transparent;
+  padding: 8px;
+  color: #ccc;
+  border-color: #ccc;
+  border-radius: 6px;
+  margin: 10px;
+  outline: 0;
+}
+
+.x:focus {
+  border-color: rgb(203, 243, 23);
 }
