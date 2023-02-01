@@ -3,9 +3,11 @@ version: '3.9'
 services:
   web:
     build: .
+    restart: always
     command: python /app/manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
+      - ./learning/templates/common/timestamps_form.html:/app/learning/templates/common/timestamps_form.html
       - ./.venv/Lib/site-packages/pytube/captions.py:/usr/local/lib/python3.10/site-packages/pytube/captions.py
     ports:
       - 8000:8000
@@ -24,6 +26,7 @@ services:
     command: celery -A django_project worker -l info
     volumes:
       - .:/app
+      - ./learning/templates/common/timestamps_form.html:/app/learning/templates/common/timestamps_form.html
       - ./.venv/Lib/site-packages/pytube/captions.py:/usr/local/lib/python3.10/site-packages/pytube/captions.py
     # env_file:
     #   - ./.venv

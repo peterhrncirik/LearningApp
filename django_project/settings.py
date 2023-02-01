@@ -3,6 +3,7 @@ from pathlib import Path
 from environs import Env
 import socket
 
+
 # Set Up ENV
 env = Env()
 env.read_env()
@@ -201,6 +202,12 @@ ACCOUNT_UNIQUE_EMAIL = True
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# Celery
 CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/'
 CELERY_RESULT_BACKEND = 'django-db'
 
+# Stripe
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51MPoOII7DEQKabRTENuxU8MEP0inYskdNRJNk3AXz6UarrGm5Ey9LCQUw6MO0JqsUSVTrdGQ3JtEU8vMhx31Uurp00pqL2veSH' # Publishable key
+STRIPE_SECRET_KEY = 'sk_test_51MPoOII7DEQKabRTYecIKkHoQXiK4Jbyg29ZolfIguquXYAhA53tKkVZtLUw8m47eIImHwVXJSVszgeNxRRys1L2006rhREM0q'      # Secret key
+STRIPE_API_VERSION = '2022-11-15'
+STRIPE_PRICE_ID = '<enter your stripe price id>'

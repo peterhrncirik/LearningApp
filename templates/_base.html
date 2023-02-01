@@ -36,15 +36,42 @@
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0 text-white">
           <li><a href="{% url 'pages:home' %}" class="nav-link px-2 text-white">Home</a></li>
           <li><a href="{% url 'pages:about' %}" class="nav-link px-2 text-white">About</a></li>
+          <li><a href="{% url 'pages:pricing' %}" class="nav-link px-2 text-white">Pricing</a></li>
         </ul>
 
         <div class="dropdown text-end">
           {% if user.is_authenticated %}
-          <a type="button" href="#" class="d-block  text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown"
+          <a type="button" href="#" class="d-block text-white text-decoration-none dropdown-toggle fw-bold" data-bs-toggle="dropdown"
             aria-expanded="false">
             {{ user.email }}
           </a>
           <ul class="dropdown-menu dropdown-menu-dark text-small border border-warning">
+            {% if user.is_member %}
+            <li>
+                <span class="dropdown-item d-flex gap-2 align-items-center text-success fw-bold">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi text-success bi-person-fill-check" viewBox="0 0 16 16">
+                    <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                    <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
+                  </svg>
+                  {% if user.is_member and not user.is_unlimited %}
+                  Pro 
+                  {% elif user.is_member and user.is_unlimited %}
+                  Unlimited
+                  {% endif %}
+                </span>
+            </li>
+            {% else %}
+            <li>
+              <a class="dropdown-item d-flex gap-2 align-items-center text-warning" href="{% url 'pages:pricing' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill-up" viewBox="0 0 16 16">
+                  <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0ZM11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                  <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4Z"/>
+                </svg>
+                Go PRO
+              </a>
+            </li>
+            {% endif %}
+            <li><hr class="dropdown-divider"></li>
             <li>
               <a class="dropdown-item d-flex gap-2 align-items-center" href="{% url 'pages:start' %}">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-btn" viewBox="0 0 16 16">

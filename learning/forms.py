@@ -33,6 +33,8 @@ class VideoLinkForm(forms.Form):
 
 class TimestampsForm(forms.Form):
     
+    template_name = "common/timestamps_form.html"
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -40,17 +42,15 @@ class TimestampsForm(forms.Form):
         self.fields['end'].label = "To"
 
     
-    start =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'x'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
+    start =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control bg-dark text-secondary'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
 
-    end =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'x'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
+    end =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control bg-dark text-secondary'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
     
 
     def clean(self):
         
         """
-        
         Make sure starting value is not greater than ending value.
-        
         """
         cleaned_data = super().clean()
         start = cleaned_data.get("start")
@@ -63,7 +63,19 @@ class TimestampsForm(forms.Form):
             raise ValidationError('Starting value can not be greater than ending value.')
         
         
-        
+# class ExampleFormSetHelper(FormHelper):
+    
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.form_method = 'post'
+#         self.layout = Layout(
+#             'start',
+#             'end',
+#         )
+#         self.render_required_fields = True
+#         self.template = 'learning/partials/formset.html'
+#         self.add_input(Submit('submit', 'Uloz'))
+   
 
 
         

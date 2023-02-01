@@ -1,0 +1,21 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Start here{% endblock title %}
+
+{% block content %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center text-white">
+  <h2 class="fw-semibold">Confirm choice</h2>
+  <hr class="text-warning">
+</div>
+
+<div class="text-white">
+<h3>Final price {{ price }}</h3>
+<h3>Session {{ session_id }}</h3>
+</div>
+
+
+
+
+{% endblock content %}

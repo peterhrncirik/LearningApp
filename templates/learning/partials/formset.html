@@ -13,8 +13,7 @@
     <div>
         {{ formset.management_form|crispy }}
     </div>
-
-    <table{% if form_id %} id="{{ form_id }}_table"{% endif%} class="table table-striped table-condensed">
+    <table{% if form_id %} id="{{ form_id }}_table"{% endif%} class="table table-striped table-condensed text-white">
         <thead>
             {% if formset.readonly and not formset.queryset.exists %}
             {% else %}
@@ -30,14 +29,12 @@
             {% endif %}
         </thead>
 
-        {% comment %} <tr class="hidden empty-form">
-            {% for field in formset.empty_form %}
-                {% include 'bootstrap/field.html' with tag="td" form_show_labels=False %}
-            {% endfor %}
-        </tr> {% endcomment %}
-
         <tbody>
-
+            {% comment %} <tr class="hidden empty-form">
+                {% for field in formset.empty_form %}
+                    {% include 'bootstrap/field.html' with tag="td" form_show_labels=False %}
+                {% endfor %}
+            </tr> {% endcomment %}
 
             {% for form in formset %}
                 {% if form_show_errors and not form.is_extra %}
@@ -49,7 +46,6 @@
                         {% include 'bootstrap/field.html' with tag="td" form_show_labels=False %}
                     {% endfor %}
                 </tr>
-
             {% endfor %}
         </tbody>
     </table>

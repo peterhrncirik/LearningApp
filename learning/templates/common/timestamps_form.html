@@ -1,0 +1,14 @@
+{% for field in form %}
+{% comment %} <div class="col">
+  {{ field.errors }}
+  {{ field.label_tag }} {{ field }}
+  <input type="{{ field.input_type }}" class="form-control" placeholder="First name" aria-label="First name">
+</div> {% endcomment %}
+
+<div class="col input-group flex-nowrap mx-auto text-center">
+  {% if not forloop.last %}
+  <span class="input-group-text bg-dark text-secondary" id="addon-wrapping">@</span>
+  {% endif %}
+  {{ field }}
+</div>
+{% endfor %}

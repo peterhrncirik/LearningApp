@@ -1,32 +1,5 @@
-<div class='row text-center'>
-  <form action="{% url 'learning:process' user.id video_id %}" method="POST">
-
-    {% csrf_token %}
-    {{ formset.management_form }}
-
-
-    <div id="timestamps-form-list">
-
-      {% for form in formset %}
-        <div class="timestamp-form">
-
-          {{ form }}
-          
-        </div>
-      {% endfor %}
-
+{% for field in form %}
+    <div class="fieldWrapper">
+      <h1> KOKOOOOOOOgfdgfdfdgOOOOOOOOT </h1>
     </div>
-
-    <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
-
-    <div class="form-actions">
-      <input type="hidden" name="link" id="link" value="{{ link }}">
-        <input type="submit" name="submit" value="Save" class="btn btn-primary" id="submit-id-submit">
-        <button  name="append"  class="btn btn-danger" id="append" onclick="manageForm()">Mark new timestamp</button>
-    </div>
-
-  </form> 
-</div>
-
-
-
+{% endfor %}

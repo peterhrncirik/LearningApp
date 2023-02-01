@@ -4,6 +4,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Button, Layout, Div, HTML, Fieldset
 from crispy_bootstrap5.bootstrap5 import FloatingField
 
+
 class VideoLinkForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
@@ -24,3 +25,7 @@ class VideoLinkForm(forms.Form):
                         'hx-swap': 'outerhtml',
                     }),
                     required=False)
+    
+
+    
+    

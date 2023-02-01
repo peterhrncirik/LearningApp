@@ -11,6 +11,28 @@
 </div>
 
 
+{% comment %} <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <img src="..." class="rounded me-2" alt="...">
+    <strong class="me-auto">Bootstrap</strong>
+    <small>11 mins ago</small>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body">
+    Hello, world! This is a toast message.
+  </div>
+</div>
+
+<div class="row text-white d-flex flex-column align-items-center justify-content-center">
+  <p>Use form to mark parts of the video you want to extract.</p>
+  <p>FROM representing starting time (00:01:25) TO representing ending time (00:01:55)</p>
+</div>
+
+<div class="input-group">
+  <div class="input-group-text">@</div>
+  <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Username">
+</div> {% endcomment %}
+
 <div class='row text-center text-white'>
   <form action="{% url 'learning:process' user.id video_id %}" method="POST">
 
@@ -18,36 +40,51 @@
     {{ formset.management_form }}
 
 
-    <div id="timestamps-form-list">
+   <div id="timestamps-form-list">
 
-      {% for form in formset %}
-        <div class="timestamp-form">
+
+    {% for form in formset %}
+        <div class="timestamp-form row my-3 text-center">
+          {% if forloop.first %}
+          <p>START</p>
+          {% endif %}
 
           {{ form }}
+          {% comment %} {% for field in form %}
+          
+          <div class="col input-group flex-nowrap">
+            {% if not forloop.last %}
+            <span class="input-group-text bg-dark text-secondary" id="addon-wrapping">@</span>
+            {% endif %}
+            {{ field }}
+          </div>
+          
+          {% endfor %} {% endcomment %}
           
         </div>
-      {% endfor %}
+      {% endfor %}    
+
       
 
+    
     </div>
     <div class="row my-4 text-danger">
       {{ formset.non_form_errors }}
-    </div>
-  
+    </div> 
 
 
 
       <div id='empty-form' class='d-none'>{{ formset.empty_form }}</div>
 
 
-    <div class="form-actions my-2">
+    <div class="form-actions my-1">
       <input type="hidden" name="link" id="link" value="{{ link }}">
         <input type="submit" name="submit" value="Save" class="btn btn-success" id="submit-id-submit">
-        <button  name="append"  class="btn btn-danger" id="append" onclick="manageForm()">Add new timestamp</button>
+        <button  name="append"  class="btn btn-danger" id="append" onclick="manageForm()">Add new timestamp</button> 
     </div>
 
-  </form> 
-</div>
+  </form>
+  </div> 
 
 
 

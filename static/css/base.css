@@ -51,11 +51,11 @@ body {
 /* Learning Formset */
 .x {
   background: transparent;
-  padding: 8px;
+  padding: 5px;
   color: #ccc;
-  border-color: #ccc;
-  border-radius: 6px;
-  margin: 10px;
+  border-color: rgb(112, 112, 112);
+  /* border-radius: 6px; */
+  margin: 5px;
   outline: 0;
 }
 
