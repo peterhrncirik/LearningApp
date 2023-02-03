@@ -1,6 +1,8 @@
 from django.urls import path
 
 from . import views
+from . import webhooks
+
 
 app_name = 'pages'
 
@@ -10,8 +12,13 @@ urlpatterns = [
     path("start/", views.start, name="start"),
     path("pricing/", views.pricing, name="pricing"),
     
+    # Account 
+    path('user/<int:user_id>/', views.user_detail, name='user_detail'),
+    path('user/<int:user_id>/files/', views.user_files, name='user_files'),
+    
     # Stripe
     path('checkout/<int:product_id>/', views.checkout, name='checkout'),
-    path('checkout/success', views.success, name='success'),
+    path('checkout/success/', views.success, name='success'),
     path('checkout/cancel/', views.cancel, name='cancel'),
+    path('checkout/webhook/', webhooks.stripe_webhook, name='stripe-webhook'),
 ]

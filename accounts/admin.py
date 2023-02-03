@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
     model = CustomUser
     fieldsets = UserAdmin.fieldsets + (
         ('Membership status', {
-            'fields': ('is_member', 'is_unlimited')
+            'fields': ('is_member', 'is_unlimited', 'language')
         }),
     )
     list_display = ['email', 'username', 'is_member', 'is_unlimited']

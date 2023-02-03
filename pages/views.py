@@ -4,6 +4,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect, HttpResponse, reverse
 from django.http import HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from accounts.models import StripeCustomer, CustomUser
 from .forms import VideoLinkForm
 from .video import check_video
@@ -19,6 +20,13 @@ def home(request):
 
     return render(request, 'pages/home.html')
 
+def about(request):
+    return render(request, 'pages/about.html')
+
+def pricing(request):
+    return render(request, 'pages/pricing.html')
+
+# Start Learning Page
 @login_required
 def start(request):
     
@@ -72,54 +80,84 @@ def start(request):
 
     return render(request, 'pages/start.html', {'form': form})
 
+# User Account Details
 @login_required
-def order_create(request):
-    pass
+def user_detail(request, user_id):
+    
+    subscription = None
+    # Retrieve Stripe Customer Data
+    try:
+        stripe_customer = StripeCustomer.objects.get(user=request.user)
+        subscription = stripe.Subscription.retrieve(stripe_customer.subscription_id)
+    except:
+        pass
+    
+    # Send to template
+    context = {
+        'subscription': subscription,
+    }
+    
+    return render(request, 'account/details.html', context)
 
+# User Files
+@login_required
+def user_files(request, user_id):
+    
+    return render(request, 'account/files.html',)
+
+# Stripe Views
+@login_required
 def success(request):
     
-    if request.method == 'GET' and 'session_id' in request.GET:
-        session = stripe.checkout.Session.retrieve(request.GET['session_id'])
-        print(session['metadata']['product_type'])
-        customer = StripeCustomer()
-        customer.user = request.user
-        customer.stripe_id = session.customer
-        customer.is_active = True
-        customer.subscription_id = session.subscription
-        # Update also User object
-        current_user = CustomUser.objects.get(id=request.user.id)
-        current_user.is_member = True
-        if session['metadata']['product_type'] == '2':
-            current_user.is_unlimited = True
-        current_user.save()
-        customer.save()
-        
-        return render(request, 'pages/success.html', {'session': session})
-
+    if request.method == 'POST':
     
+        # Retrieve Stripe Customer Data
+        stripe_customer = StripeCustomer.objects.get(user=request.user)
+        
+        # Update Subscription & StripeCustomer Model
+        stripe.Subscription.modify(stripe_customer.subscription_id, cancel_at_period_end=False)
+        
+        return redirect(reverse('pages:user_detail', args=[request.user.id]))
+    
+    return render(request, 'pages/success.html')
 
+@login_required
 def cancel(request):
+    
+    if request.method == 'POST':
+        
+        # Retrieve Stripe Customer Data
+        stripe_customer = StripeCustomer.objects.get(user=request.user)
+        
+        # Update Subscription & StripeCustomer Model
+        stripe.Subscription.modify(stripe_customer.subscription_id, cancel_at_period_end=True)
+        
+        return redirect(reverse('pages:user_detail', args=[request.user.id]))
+        
+        
     return render(request, 'pages/cancel.html')
 
 @login_required
 def checkout(request, product_id):
     
-    # success_url = request.build_absolute_uri(reverse('pages:success'))
+    #FIXME: Bug when redirecting after login
+    
+    success_url = request.build_absolute_uri(reverse('pages:success'))
     #TODO: Hardcoded URL
-    success_url = 'http://127.0.0.1:8000/checkout/success?session_id={CHECKOUT_SESSION_ID}'
+    # success_url = 'http://127.0.0.1:8000/checkout/success?session_id={CHECKOUT_SESSION_ID}'
     cancel_url = request.build_absolute_uri(reverse('pages:cancel'))
     
 
     # redirect if user is already a member
     try:
         #TODO: AK je len member allow upgrade to unlimited
-        current_user = StripeCustomer.objects.get(user=request.user)
-        if current_user.is_active:
+        if request.user.is_member:
             return redirect('pages:start')
     except StripeCustomer.DoesNotExist:
         pass
     
     if request.method == 'POST':
+
         
         if product_id == 1:
             price_id = 'price_1MUTDRI7DEQKabRTAWZvrPKQ'
@@ -130,6 +168,7 @@ def checkout(request, product_id):
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             customer_email = request.user.email,
+            client_reference_id=request.user.id,
             line_items=[{
                 'price': price_id,
                 'quantity': 1,
@@ -142,12 +181,10 @@ def checkout(request, product_id):
             cancel_url=cancel_url,
         )
         
+
+        
         # redirect to Stripe payment form
         return redirect(session.url, code=303)
 
 
-def about(request):
-    return render(request, 'pages/about.html')
-
-def pricing(request):
-    return render(request, 'pages/pricing.html')
+            

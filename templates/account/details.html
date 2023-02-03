@@ -1,0 +1,28 @@
+{% extends '_base.html' %}
+
+{% block title %}Account details{% endblock %}
+
+{% block content %}
+<div class="row p-4 p-md-5 my-5 bg-dark text-white">
+<h2>{{ user.username }} - Account details</h2>
+<hr class="text-warning">
+{% if user.is_member %}
+<div class="row border {% if subscription.status == 'active' %}border-success{% else %}border-warning{% endif %} p-3">
+    <h4>Subscription details</h4>
+    <p>Type: {% if user.is_unlimited %}Unlimited{% else %}Pro{% endif %}</p>
+    <p>Status: <span class="{% if subscription.status == 'active' %}text-success{% else %}text-warning{% endif %}">{{ subscription.status }}</span> {% if subscription.cancel_at %}<span class="text-small fw-bold text-danger">(CANCELLED)</span>{% endif %}</p>
+    <p>Created: {{ subscription.created }}</p>
+    <p>Next billing period: {{ subscription.current_period_end }}</p>
+    {% if subscription.cancel_at %}
+        <p>Cancel at: {{ subscription.cancel_at }}</p>
+    {% endif %}
+    <a href="https://billing.stripe.com/p/login/test_bIYcPdakP9hz2wo9AA">Manage your subscription</a>
+</div>
+{% endif %}
+<p>Languages learning: {{ user.language }}</p>
+<p><a href="#">See my files</a></p>
+<p><a href="{% url 'account_change_password' %}">Change Password</a><p> 
+<p><a href="#">Delete Account</a><p> 
+
+</div>
+{% endblock content %}

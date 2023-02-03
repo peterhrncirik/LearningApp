@@ -191,12 +191,15 @@ AUTHENTICATION_BACKENDS = (
     "allauth.account.auth_backends.AuthenticationBackend",
 )
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
+#TODO: Remove logout confirmation
+#TODO: Add social auth
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_FORMS = {'signup': 'accounts.forms.SimpleSignupForm'}
 
 # Forms CSS
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -209,5 +212,6 @@ CELERY_RESULT_BACKEND = 'django-db'
 # Stripe
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51MPoOII7DEQKabRTENuxU8MEP0inYskdNRJNk3AXz6UarrGm5Ey9LCQUw6MO0JqsUSVTrdGQ3JtEU8vMhx31Uurp00pqL2veSH' # Publishable key
 STRIPE_SECRET_KEY = 'sk_test_51MPoOII7DEQKabRTYecIKkHoQXiK4Jbyg29ZolfIguquXYAhA53tKkVZtLUw8m47eIImHwVXJSVszgeNxRRys1L2006rhREM0q'      # Secret key
+STRIPE_WEBHOOK_SECRET = 'whsec_e72ddc9c58f761b7273cd7bdd8f77f048a4d2ba4b853d32a97aaeba20fd29a9b'
 STRIPE_API_VERSION = '2022-11-15'
 STRIPE_PRICE_ID = '<enter your stripe price id>'
