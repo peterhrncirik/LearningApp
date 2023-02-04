@@ -23,7 +23,7 @@
   </div>
 </div>
 
-<div class="row text-white d-flex flex-column align-items-center justify-content-center">
+<div class="row  d-flex flex-column align-items-center justify-content-center">
   <p>Use form to mark parts of the video you want to extract.</p>
   <p>FROM representing starting time (00:01:25) TO representing ending time (00:01:55)</p>
 </div>
@@ -33,7 +33,7 @@
   <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Username">
 </div> {% endcomment %}
 
-<div class='row text-center text-white'>
+<div class='row text-center '>
   <form action="{% url 'learning:process' user.id video_id %}" method="POST">
 
     {% csrf_token %}
@@ -54,7 +54,7 @@
           
           <div class="col input-group flex-nowrap">
             {% if not forloop.last %}
-            <span class="input-group-text bg-dark text-secondary" id="addon-wrapping">@</span>
+            <span class="input-group-text  text-secondary" id="addon-wrapping">@</span>
             {% endif %}
             {{ field }}
           </div>
@@ -114,7 +114,7 @@
     // Append new form
     const formDiv = document.getElementById('timestamps-form-list')
     const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
-    copyEmptyFormEl.setAttribute('class', 'timestamps-form my-1 form-control bg-dark text-white border border-0')
+    copyEmptyFormEl.setAttribute('class', 'timestamps-form my-1 form-control   border border-0')
     copyEmptyFormEl.setAttribute('id', `form-${parseInt(currentNum)}`)
     const regex = new RegExp('__prefix__', 'g')
     copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, parseInt(currentNum))

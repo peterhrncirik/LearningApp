@@ -16,3 +16,4 @@ media
 captions_new.py
 accounts/migrations/
 pages/migrations/
+static/bootstrap/

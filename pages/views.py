@@ -26,6 +26,10 @@ def about(request):
 def pricing(request):
     return render(request, 'pages/pricing.html')
 
+def how(request):
+    
+    return render(request, 'pages/how.html')
+
 # Start Learning Page
 @login_required
 def start(request):
