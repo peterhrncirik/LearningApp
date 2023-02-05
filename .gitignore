@@ -15,5 +15,7 @@ media
 .env
 captions_new.py
 accounts/migrations/
+learning/migrations/
 pages/migrations/
 static/bootstrap/
+celerybeat-schedule

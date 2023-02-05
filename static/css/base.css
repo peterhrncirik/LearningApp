@@ -19,6 +19,10 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+.bd-masthead {
+  /* background-image: linear-gradient( 358.4deg,  rgba(249, 151, 119, 0.349) -2.1%, rgba(98, 58, 162, 0.445) 90% ); */
+}
+
 .container {
   max-width: 960px;
 }
@@ -31,6 +35,15 @@ body {
 .feature-icon-small {
   width: 3rem;
   height: 3rem;
+}
+
+/* Pricing Cards Shadows */
+.card-pro {
+  box-shadow: rgba(247, 18, 217, 0.164) 0px 19px 38px, rgba(255, 32, 255, 0.082) 0px 15px 12px !important;
+}
+
+.card-unlimited {
+  box-shadow: rgba(247, 91, 18, 0.3) 0px 19px 38px, rgba(255, 103, 32, 0.116) 0px 15px 12px !important;
 }
 
 .footer {

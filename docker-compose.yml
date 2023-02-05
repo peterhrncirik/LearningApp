@@ -23,7 +23,9 @@ services:
     restart: always
     build:
       context: .
-    command: celery -A django_project worker -l info
+    # command: celery -A django_project worker -l info # Original, but crontab doesn't work
+    command: celery -A django_project worker -l info -B # -B for worker, but prolly not good for production
+    # command: celery -A django_project beat -l info # beat instead of worker for crontab
     volumes:
       - .:/app
       - ./learning/templates/common/timestamps_form.html:/app/learning/templates/common/timestamps_form.html

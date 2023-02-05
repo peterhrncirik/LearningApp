@@ -1,5 +1,6 @@
 import os
 from celery import Celery
+from celery.schedules import crontab
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_project.settings')
 
@@ -9,8 +10,13 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.autodiscover_tasks()
 
-# @app.task(bind=True)
-# def debug_task(self):
-#     print(f'Request: {self.request!r}')
-    
-    
+# Reset User Videos Every Month
+app.conf.beat_schedule = {
+    'reset_videos': {
+        'task': 'reset_videos',
+        'schedule': crontab(0, 0, day_of_month='1'),
+    },
+}
+
+app.conf.timezone = 'UTC'
+ 

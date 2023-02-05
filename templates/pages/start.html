@@ -5,6 +5,14 @@
 {% block title %}Start here{% endblock title %}
 
 {% block content %}
+{% if user.videos_monthly_limit %}
+<div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
+  <h2 class="fw-semibold">Looks like you have reached your limit!</h2>
+  <hr class="text-warning">
+  <p>Your limit will be resetted on the first day of next month.<p>
+  <p><a href="{% url 'pages:pricing' %}">Update your account</a> and learn without limits.</p>
+</div>
+{% else %}
 <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center ">
   <h2 class="fw-semibold">Let's start learning!</h2>
   <p> https://www.youtube.com/watch?v=Z5lbuzMw330 </p>
@@ -19,6 +27,7 @@
 <div id="main" class="">
 
 </div>
+{% endif %}
 
 <script>
   document.getElementById('link').addEventListener('keydown', function(event) {

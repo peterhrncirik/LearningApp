@@ -4,7 +4,7 @@ from django.http import FileResponse
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
-from .models import Video, Learning
+from .models import Video
 from accounts.models import CustomUser
 from .forms import TimestampsForm
 from django.core.exceptions import ValidationError
@@ -28,7 +28,7 @@ from pprint import pprint
 @login_required
 def learning(request, id):
     
-    TimestampsFormSet = formset_factory(TimestampsForm, extra=3, can_delete=True)
+    TimestampsFormSet = formset_factory(TimestampsForm, extra=1, can_delete=True)
     formset = TimestampsFormSet()
     print(formset)
     if request.method == 'POST':
@@ -43,18 +43,42 @@ def learning(request, id):
 @login_required
 def process_timestamps(request, id, video_id):
     
+    if not request.user.is_member:
+        FORMS_MAX_NUMBER = 5
+    elif request.user.is_member and not request.user.is_unlimited:
+        FORMS_MAX_NUMBER = 10
+    else:
+        FORMS_MAX_NUMBER = 100
+    
     #TODO: max_num, validate_max = premium future check
-    TimestampsFormSet = formset_factory(TimestampsForm, max_num=10, validate_max=True, min_num=1, validate_min=True, can_delete=True)
+    TimestampsFormSet = formset_factory(TimestampsForm, max_num=FORMS_MAX_NUMBER, validate_max=True, min_num=1, validate_min=True, can_delete=True)
     marked_timestamps = []
     
     if request.method == 'POST':
         
+        #TODO: Zatial takyto limit check, sem sa to ani nema preco dostat, ale len pre istotu
+        if request.user.videos_monthly_limit:
+            return redirect('pages:home')
+        
         formset = TimestampsFormSet(request.POST)
-        print(formset)
-        current_user = request.user
+
         if formset.has_changed() and formset.is_valid():
             
-            #TODO: Insert new Learning session into DB
+            # Update User
+            user = CustomUser.objects.get(id=request.user.id)
+            user.current_videos_month += 1
+
+            # Check premium limits
+            if not user.is_member and user.current_videos_month == 5:
+                user.videos_monthly_limit = True
+            elif user.is_member and not user.is_unlimited and user.current_videos_month == 10:
+                user.videos_monthly_limit = True
+            
+            user.save()
+            
+            # Update Video
+            #TODO: output_size bude nieco ine / ide to, ale zahrna to aj tie checked na DELETE
+            Video.objects.create(user=user, video_id=video_id, output_size=len(formset))
             
             # Start processing video
             timestamps = formset.cleaned_data
@@ -72,7 +96,8 @@ def process_timestamps(request, id, video_id):
             
             # Start processing video 
             print('STARTING PROCESSING VIDEO.................')
-            result = process_video_async.delay(link=f'https://www.youtube.com/{video_id}', video_id=video_id, user_id=current_user.id, timestamps=marked_timestamps)
+            #TODO: Tu som zmenil current_user.id na request.user.id - nemal by byt bug ale just in case
+            result = process_video_async.delay(link=f'https://www.youtube.com/{video_id}', video_id=video_id, user_id=request.user.id, timestamps=marked_timestamps)
             
             #TODO: Skus timestamp vacsi ako cele video aky bug to daa
             

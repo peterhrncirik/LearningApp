@@ -19,6 +19,9 @@ class CustomUser(AbstractUser):
     is_member = models.BooleanField(default=False)
     is_unlimited = models.BooleanField(default=False)
     language = models.CharField(max_length=40, choices=LANGUAGES, null=True, blank=True)
+    current_videos_month = models.IntegerField(default=0)
+    videos_monthly_limit = models.BooleanField(default=False)
+    
     #TODO: languages for premium users
 
     def __str__(self):
