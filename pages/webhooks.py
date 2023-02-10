@@ -30,6 +30,9 @@ def stripe_webhook(request):
         if session.mode == 'subscription' and session.payment_status == 'paid':
             try:
                 current_user = CustomUser.objects.get(id=session.client_reference_id)
+                print('-----------------------------------------------')
+                print(current_user)
+                print('-----------------------------------------------')
             except current_user.DoesNotExist:
                 return HttpResponse(status=404)
             

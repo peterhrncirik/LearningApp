@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
 from .models import Video
 from accounts.models import CustomUser
-from .forms import TimestampsForm
+from .forms import TimestampsForm, BaseTimestampFormSet
 from django.core.exceptions import ValidationError
 
 import re
@@ -28,9 +28,10 @@ from pprint import pprint
 @login_required
 def learning(request, id):
     
-    TimestampsFormSet = formset_factory(TimestampsForm, extra=1, can_delete=True)
+    #TODO: Change Delete checkbox to Delete input btn
+    TimestampsFormSet = formset_factory(TimestampsForm, formset=BaseTimestampFormSet, extra=3, can_delete=True)
     formset = TimestampsFormSet()
-    print(formset)
+
     if request.method == 'POST':
         
         User = CustomUser.objects.get(id=id)

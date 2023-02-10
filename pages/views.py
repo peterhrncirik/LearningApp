@@ -1,12 +1,11 @@
 import re
-import time
 from django.conf import settings
 from django.shortcuts import render, redirect, HttpResponse, reverse
-from django.http import HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.core.mail import send_mail
 from accounts.models import StripeCustomer, CustomUser
-from .forms import VideoLinkForm
+from .forms import VideoLinkForm, ContactUsForm
 from .video import check_video
 from pprint import pprint
 from pytube import YouTube
@@ -28,6 +27,26 @@ def pricing(request):
 
 def how(request):
     return render(request, 'pages/how.html')
+
+def contact(request):
+    
+    form = ContactUsForm()
+    
+    if request.method == 'POST':
+        
+        form = ContactUsForm(request.POST)
+
+        if form.is_valid():
+            sender = form.cleaned_data['sender']
+            msg = form.cleaned_data['message']
+            
+            send_mail('AnkifyVideo - Message From Contact Form', msg, sender, ['peto.hrncirik@gmail.com'])
+            messages.success(request, 'Thanks for the message, we will get back to you :)')
+        else:
+            messages.warning(request, 'Please give us your E-Mail as well as message :)')
+            return render(request, 'pages/contact.html', {'form': form})
+            
+    return render(request, 'pages/contact.html', {'form': form})
 
 # Start Learning Page
 @login_required
@@ -111,33 +130,12 @@ def user_files(request, user_id):
 # Stripe Views
 @login_required
 def success(request):
-    
-    if request.method == 'POST':
-    
-        # Retrieve Stripe Customer Data
-        stripe_customer = StripeCustomer.objects.get(user=request.user)
-        
-        # Update Subscription & StripeCustomer Model
-        stripe.Subscription.modify(stripe_customer.subscription_id, cancel_at_period_end=False)
-        
-        return redirect(reverse('pages:user_detail', args=[request.user.id]))
-    
+     
     return render(request, 'pages/success.html')
 
 @login_required
 def cancel(request):
-    
-    if request.method == 'POST':
-        
-        # Retrieve Stripe Customer Data
-        stripe_customer = StripeCustomer.objects.get(user=request.user)
-        
-        # Update Subscription & StripeCustomer Model
-        stripe.Subscription.modify(stripe_customer.subscription_id, cancel_at_period_end=True)
-        
-        return redirect(reverse('pages:user_detail', args=[request.user.id]))
-        
-        
+           
     return render(request, 'pages/cancel.html')
 
 @login_required
@@ -171,7 +169,7 @@ def checkout(request, product_id):
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             customer_email = request.user.email,
-            client_reference_id=request.user.id,
+            client_reference_id = request.user.id,
             line_items=[{
                 'price': price_id,
                 'quantity': 1,

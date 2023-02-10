@@ -17,10 +17,7 @@ html {
 body {
   margin-bottom: 60px; /* Margin bottom by footer height */
   font-family: 'Roboto', sans-serif;
-}
-
-.bd-masthead {
-  /* background-image: linear-gradient( 358.4deg,  rgba(249, 151, 119, 0.349) -2.1%, rgba(98, 58, 162, 0.445) 90% ); */
+  background: radial-gradient(circle at bottom left, #256459, #371257);
 }
 
 .container {
@@ -31,6 +28,15 @@ body {
   max-width: 700px;
 }
 
+/* NAV Links Hover */
+.links-open .nav-link {
+  border-bottom: 1px solid transparent;
+}
+
+.links-open .nav-link:hover {
+  border-bottom: 1px solid #4BD3AB;
+}
+
 /* Home Icons */
 .feature-icon-small {
   width: 3rem;
@@ -39,11 +45,11 @@ body {
 
 /* Pricing Cards Shadows */
 .card-pro {
-  box-shadow: rgba(247, 18, 217, 0.164) 0px 19px 38px, rgba(255, 32, 255, 0.082) 0px 15px 12px !important;
+  box-shadow: rgba(247, 18, 217, 0.26) 0px 19px 38px, rgba(255, 32, 255, 0.288) 0px 15px 22px !important;
 }
 
 .card-unlimited {
-  box-shadow: rgba(247, 91, 18, 0.3) 0px 19px 38px, rgba(255, 103, 32, 0.116) 0px 15px 12px !important;
+  box-shadow: rgba(247, 91, 18, 0.404) 0px 19px 38px, rgba(255, 103, 32, 0.295) 0px 15px 22px !important;
 }
 
 .footer {
@@ -67,17 +73,3 @@ body {
   display:inline;
 }
 
-/* Learning Formset */
-.x {
-  background: transparent;
-  padding: 5px;
-  color: #ccc;
-  border-color: rgb(112, 112, 112);
-  /* border-radius: 6px; */
-  margin: 5px;
-  outline: 0;
-}
-
-.x:focus {
-  border-color: rgb(203, 243, 23);
-}

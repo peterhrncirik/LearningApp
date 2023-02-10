@@ -12,6 +12,7 @@ urlpatterns = [
     path("start/", views.start, name="start"),
     path("pricing/", views.pricing, name="pricing"),
     path("how-does-it-work/", views.how, name="how"),
+    path("contact-us/", views.contact, name="contact"),
     
     # Account 
     path('user/<int:user_id>/', views.user_detail, name='user_detail'),

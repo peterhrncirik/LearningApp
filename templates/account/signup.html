@@ -12,7 +12,7 @@
     <p class="col-lg-10 fs-4">You can sign-up with your E-Mail or directly through your Gmail account.</p>
   </div>
   <div class="col-md-10 mx-auto col-lg-5">
-    <form class="p-4 p-md-5 border border-success rounded-3  " method="post">
+    <form class="p-4 p-md-5 border border-success rounded-3" method="post">
       {% csrf_token %}
       {{ form|crispy }}
       <button class="btn btn-warning" type="submit">Sign up</button>

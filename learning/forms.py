@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import formset_factory
+from django.forms import formset_factory, BaseFormSet
 from django.urls import reverse_lazy
 from django.core.exceptions import ValidationError
 from crispy_forms.helper import FormHelper
@@ -38,13 +38,13 @@ class TimestampsForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.fields['start'].label = "From"
-        self.fields['end'].label = "To"
+        # self.fields['start'].label = "From"
+        # self.fields['end'].label = "To"
 
     
-    start =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control bg-dark text-secondary'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
+    start =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
 
-    end =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control bg-dark text-secondary'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
+    end =  forms.TimeField(widget=forms.TimeInput(attrs={'class': 'form-control'}, format='%H:%M:%S'), initial='00:00:00', input_formats=['%H:%M:%S'])
     
 
     def clean(self):
@@ -63,19 +63,11 @@ class TimestampsForm(forms.Form):
             raise ValidationError('Starting value can not be greater than ending value.')
         
         
-# class ExampleFormSetHelper(FormHelper):
-    
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.form_method = 'post'
-#         self.layout = Layout(
-#             'start',
-#             'end',
-#         )
-#         self.render_required_fields = True
-#         self.template = 'learning/partials/formset.html'
-#         self.add_input(Submit('submit', 'Uloz'))
-   
+
+class BaseTimestampFormSet(BaseFormSet):
+
+
+    deletion_widget = forms.CheckboxInput(attrs={'class': 'form-check-input'})
 
 
         

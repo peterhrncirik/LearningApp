@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from environs import Env
 import socket
+from django.contrib import messages
 
 # Set Up ENV
 env = Env()
@@ -203,6 +204,15 @@ ACCOUNT_FORMS = {'signup': 'accounts.forms.SimpleSignupForm'}
 # Forms CSS
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# Messages Bootstrap Classes
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.SUCCESS: 'alert-success',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}
 
 # Celery
 CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/'

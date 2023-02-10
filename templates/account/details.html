@@ -8,7 +8,7 @@
     <p>{% if user.is_member %}<span class="badge bg-success">Premium</span>{% endif %}<span class="fs-3"> {{ user.username }} - Account details </span> {% if not user.is_member %}<a class="btn btn-warning" href="{% url 'pages:pricing' %}">Go premium</a>{% endif %}</p>
     {% if user.is_member %}
     <p>Subscription: {% if user.is_unlimited %}Unlimited{% else %}Pro{% endif %}</p>
-    <a href="https://billing.stripe.com/p/login/test_bIYcPdakP9hz2wo9AA" class="btn btn-primary btn-sm w-50 mx-2" target="_blank">Manage your subscription<span class="text-muted fw-light fw-italic "> (Redirects to Stripe)</span></a>
+    <a href="https://billing.stripe.com/p/login/test_bIYcPdakP9hz2wo9AA" class="btn btn-primary btn-sm w-50 mx-2" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title="Redirects to Stripe">Manage your subscription<span class="text-muted fw-light fw-italic d-inline d-md-none"> (Redirects to Stripe)</span></a>
     {% endif %}
 
     <hr class="text-warning {% if user.is_member %}my-3{% endif %}">

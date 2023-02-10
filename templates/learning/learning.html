@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<div class="row my-4">
+<div class="row my-4 mx-2 p-2 border border-success rounded-3">
   {% include 'learning/partials/video.html' with video_id=video_id %} 
 </div>
 
@@ -33,34 +33,19 @@
   <input type="text" class="form-control" id="autoSizingInputGroup" placeholder="Username">
 </div> {% endcomment %}
 
-<div class='row text-center '>
+<div class='row text-center'>
   <form action="{% url 'learning:process' user.id video_id %}" method="POST">
 
     {% csrf_token %}
     {{ formset.management_form }}
 
 
-   <div id="timestamps-form-list">
+   <div id="timestamps-form-list" class="row">
 
 
     {% for form in formset %}
-        <div class="timestamp-form row my-3 text-center">
-          {% if forloop.first %}
-          <p>START</p>
-          {% endif %}
-
-          {{ form }}
-          {% comment %} {% for field in form %}
-          
-          <div class="col input-group flex-nowrap">
-            {% if not forloop.last %}
-            <span class="input-group-text  text-secondary" id="addon-wrapping">@</span>
-            {% endif %}
-            {{ field }}
-          </div>
-          
-          {% endfor %} {% endcomment %}
-          
+        <div class="timestamp-form row mt-2">
+          {{ form }}      
         </div>
       {% endfor %}    
 
@@ -114,7 +99,7 @@
     // Append new form
     const formDiv = document.getElementById('timestamps-form-list')
     const copyEmptyFormEl = document.getElementById('empty-form').cloneNode(true)
-    copyEmptyFormEl.setAttribute('class', 'timestamps-form my-1 form-control   border border-0')
+    copyEmptyFormEl.setAttribute('class', 'timestamps-form row mt-2 d-flex')
     copyEmptyFormEl.setAttribute('id', `form-${parseInt(currentNum)}`)
     const regex = new RegExp('__prefix__', 'g')
     copyEmptyFormEl.innerHTML = copyEmptyFormEl.innerHTML.replace(regex, parseInt(currentNum))

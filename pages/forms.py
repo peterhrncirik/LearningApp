@@ -1,7 +1,7 @@
 from django import forms
 from django.urls import reverse_lazy
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Button, Layout, Div, HTML, Fieldset
+from crispy_forms.layout import Layout, Field, Submit
 from crispy_bootstrap5.bootstrap5 import FloatingField
 
 
@@ -27,5 +27,20 @@ class VideoLinkForm(forms.Form):
                     required=False)
     
 
+class ContactUsForm(forms.Form):
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_action = reverse_lazy('pages:start')
+        self.fields['sender'].label = "Your E-Mail Address"
+        self.fields['message'].label = "Your Message"
+        self.helper.layout = Layout(
+            FloatingField("sender"), 
+            Field('message'),
+            Submit('Send Message', 'Send Message', css_class='btn btn-success'),
+            )
+    
+    sender = forms.EmailField(label='Your E-Mail')    
+    message = forms.CharField(widget=forms.Textarea)    
     
