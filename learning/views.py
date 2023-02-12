@@ -29,12 +29,11 @@ from pprint import pprint
 def learning(request, id):
     
     #TODO: Change Delete checkbox to Delete input btn
-    TimestampsFormSet = formset_factory(TimestampsForm, formset=BaseTimestampFormSet, extra=3, can_delete=True)
+    TimestampsFormSet = formset_factory(TimestampsForm, formset=BaseTimestampFormSet, extra=5, can_delete=True)
     formset = TimestampsFormSet()
 
     if request.method == 'POST':
         
-        User = CustomUser.objects.get(id=id)
         video_id = request.POST.get('video_id')
 
         return render(request, "learning/learning.html", {'video_id': video_id, 'formset': formset})
@@ -66,6 +65,7 @@ def process_timestamps(request, id, video_id):
         if formset.has_changed() and formset.is_valid():
             
             # Update User
+            #TODO: Only increase numbers if result is success, on error ignore
             user = CustomUser.objects.get(id=request.user.id)
             user.current_videos_month += 1
 

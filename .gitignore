@@ -14,8 +14,8 @@ media
 .venv
 .env
 captions_new.py
-accounts/migrations/
-learning/migrations/
-pages/migrations/
+# accounts/migrations/
+# learning/migrations/
+# pages/migrations/
 static/bootstrap/
 celerybeat-schedule

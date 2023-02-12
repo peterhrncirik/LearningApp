@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from accounts.models import StripeCustomer, CustomUser
 from .forms import VideoLinkForm, ContactUsForm
+from accounts.forms import LanguagesForm
 from .video import check_video
 from pprint import pprint
 from pytube import YouTube
@@ -14,6 +15,25 @@ import stripe
 # Stripe setup
 stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
+
+LANGUAGES = (
+    ('de', 'German'),
+    ('en', 'English'),
+    ('zh-HK', 'Chinese'),
+    ('pt-PT', 'Portuguese'),
+    #TODO: Add spanish
+    # ('zh-HK', 'Chinese (Hong Kong)'),
+    # ('zh-TW', 'Chinese (Taiwan)'),
+    # ('en-GB', 'English (United Kingdom)'),
+    ('fr-FR', 'French'),
+    # ('fr-FR', 'French (France)'),
+    # ('fr-CA', 'French (Canada)'),
+    ('ja', 'Japanese'),
+    # ('pt-BR', 'Portuguese (Brazil)'),
+    # ('pt-PT', 'Portuguese (Portugal)'),
+    ('ru', 'Russian'),
+    ('it', 'Italian'),
+)
 
 def home(request):
 
@@ -52,7 +72,9 @@ def contact(request):
 @login_required
 def start(request):
     
-    form = VideoLinkForm()
+    # user_languages = [(short, long) for short, long in LANGUAGES if short in request.user.language]
+    
+    form = VideoLinkForm() 
     
     if request.method == 'POST':
         
@@ -78,16 +100,16 @@ def start(request):
                 # What if ID is wrong though?
                 video = YouTube(cd['link'])
             except:
-                return HttpResponse('<p>This doesn\'t look like correct youtube URL.</p>')
+                return HttpResponse('<p class="fw-bold text-white">This doesn\'t look like correct youtube URL.</p>')
             
         
       
             #TODO: check for subtitles and tell them if video is okay and we can continue
             # Check video
-            video_is_correct = check_video(cd['link'])
+            video_is_correct = check_video(cd['link'], language=request.user.language)
             
             if not video_is_correct:
-                return HttpResponse('<p>Looks like this video is not supported :(</p>')
+                return HttpResponse('<p class="fw-bold text-white">Looks like this video is not supported :(</p>')
             
             # Load video and get info
             video_details = {
@@ -98,13 +120,29 @@ def start(request):
             return render(request, 'pages/partials/video.html', {'video_id': id, 'video': video_details, 'link': cd['link']})
         else:
             #FIXME: Bug, ak uz raz nastane tento response check_video() sa nespusta znova + text ostava na stranke a nerefreshuje sa
-            return HttpResponse('<p>This doesn\'t look like a correct URL.</p>')
+            return HttpResponse('<p class="fw-bold text-white">This doesn\'t look like a correct URL.</p>')
 
     return render(request, 'pages/start.html', {'form': form})
 
 # User Account Details
 @login_required
 def user_detail(request, user_id):
+    
+    #TODO: Messages showing stacked up - update to show only the one that actually matter
+    
+    if request.method == 'POST':
+        form = LanguagesForm(request.POST)
+        user = CustomUser.objects.get(id=request.user.id)
+
+        if form.is_valid():
+            cd = form.cleaned_data['languages']
+            user.language = cd
+            user.save()
+            messages.success(request, 'Language updated :)')
+            return redirect(reverse('pages:user_detail', kwargs={ 'user_id': request.user.id }))
+        else:
+            messages.warning(request, 'Something went wrong.')
+            return redirect(reverse('pages:user_detail', kwargs={ 'user_id': request.user.id }))
     
     subscription = None
     # Retrieve Stripe Customer Data
@@ -117,6 +155,7 @@ def user_detail(request, user_id):
     # Send to template
     context = {
         'subscription': subscription,
+        'form': LanguagesForm(),
     }
     
     return render(request, 'account/details.html', context)

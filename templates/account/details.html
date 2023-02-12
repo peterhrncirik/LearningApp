@@ -4,6 +4,14 @@
 
 {% block content %}
 <div class="row p-4 p-md-5 my-2  ">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
 
     <p>{% if user.is_member %}<span class="badge bg-success">Premium</span>{% endif %}<span class="fs-3"> {{ user.username }} - Account details </span> {% if not user.is_member %}<a class="btn btn-warning" href="{% url 'pages:pricing' %}">Go premium</a>{% endif %}</p>
     {% if user.is_member %}
@@ -12,10 +20,22 @@
     {% endif %}
 
     <hr class="text-warning {% if user.is_member %}my-3{% endif %}">
-
-    <p>My Languages: {{ user.language }}</p>
+    <p class="fs-5 text-white">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right-fill text-success" viewBox="0 0 16 16">
+        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+        </svg> 
+        I'm currently learning: <span class="fw-bold text-success">{{ user.get_language_display }}</span>
+        {% if not user.is_member %}<span class="badge text-bg-primary">Upgrade account to change language</span>{% endif %}
+    </p>
+    {% if user.is_member %}
+    <form action="{% url 'pages:user_detail' user.id %}" method='POST' class="row row-cols-lg-auto g-1 align-items-center">
+        {% csrf_token %}
+        {{ form }}
+        <input type="submit" class="btn btn-success btn-sm" value="Change language" />
+    </form>
+    {% endif %}
     {% comment %} <p><a href="#">See my files</a></p> {% endcomment %}
-    <div class="d-flex">
+    <div class="d-flex my-4">
         <a href="{% url 'account_change_password' %}" class="btn btn-secondary btn-sm mx-1">Change Password</a>
         <a href="#" class="btn btn-danger btn-sm">Delete Account</a>
     </div>

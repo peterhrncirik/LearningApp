@@ -73,7 +73,7 @@ def process_video_async(self, link, video_id, user_id, timestamps):
             
         percentage = (i + 1) / len(timestamps) * 100
         print('Done.')
-        progress_recorder.set_progress(i + 1, len(timestamps), description=f'Preparing your files {percentage:.0f}%')
+        progress_recorder.set_progress(i + 1, len(timestamps), description=f'{percentage:.0f}% of files prepared.')
 
 
     make_archive(f'media/video/{video_id}_{user_id}/files', 'zip', f'media/video/{video_id}_{user_id}/output/')
