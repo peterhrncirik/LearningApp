@@ -8,13 +8,18 @@ from django.contrib import messages
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-SECRET_KEY
-SECRET_KEY = 'h@_1s#(!g*hnt*=#d$bml@(k4!8c186epw4r=&-y5z&_grhrtq'
+SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = False
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+
+# CSRF_TRUSTED_ORIGINS = ['http://www.ankifyvideo.site', 'http://ankifyvideo.site', 'https://www.ankifyvideo.site', 'https://ankifyvideo.site']
+CSRF_TRUSTED_ORIGINS = ['https://www.ankifyvideo.site', 'https://ankifyvideo.site']
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = [
@@ -82,6 +87,17 @@ TEMPLATES = [
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "postgres",
+#         "USER": "postgres",
+#         "PASSWORD": "postgres",
+#         "HOST": "db",  # set in docker-compose.yml
+#         "PORT": 5432,  # default postgres port
+#     }
+# }
+
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get("DB_ENGINE", "django.db.backends.sqlite3"),
@@ -93,6 +109,18 @@ DATABASES = {
 
     }
 }
+
+# For Docker/PostgreSQL usage uncomment this and comment the DATABASES config above
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "postgres",
+#         "USER": "postgres",
+#         "PASSWORD": "postgres",
+#         "HOST": "db",  # set in docker-compose.yml
+#         "PORT": 5432,  # default postgres port
+#     }
+# }
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -133,7 +161,8 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 STATIC_URL = "/static/"
 
 # Media path
-# MEDIA_URL = "/media/"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS

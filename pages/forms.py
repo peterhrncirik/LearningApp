@@ -13,8 +13,6 @@ class VideoLinkForm(forms.Form):
         self.helper = FormHelper()
         self.helper.form_action = reverse_lazy('pages:start')
         self.fields['link'].label = "Paste link to your video here"
-        # self.fields["languages"] = forms.ChoiceField(choices=choices)
-        # self.fields['languages'].label = "Language"
         self.helper.layout = Layout(Field('l'), FloatingField("link"),)
         
     link = forms.URLField(
@@ -29,7 +27,6 @@ class VideoLinkForm(forms.Form):
                     }),
                     required=False)
     
-    # languages = forms.ChoiceField(label='Select Language')
 
 class ContactUsForm(forms.Form):
     

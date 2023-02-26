@@ -109,7 +109,7 @@ def start(request):
             video_is_correct = check_video(cd['link'], language=request.user.language)
             
             if not video_is_correct:
-                return HttpResponse('<p class="fw-bold text-white">Looks like this video is not supported :(</p>')
+                return HttpResponse('<p class="fw-bold text-white">Looks like this video is not supported for this language :(</p>')
             
             # Load video and get info
             video_details = {
